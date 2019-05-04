@@ -1,6 +1,7 @@
 import re, string
 
 chapters        = {}
+orphans         = []
 entries         = {}
 last_entry_id   = None
 pattern_special = re.compile('[\W_]+')
@@ -21,15 +22,24 @@ def new_entry (line):
     eid = int(line[4:])
 
     entries[eid] = {"id" : eid, 
+                    "title" : None,
                     "lines" : []}
+
     global last_entry_id
     last_entry_id = eid
+
+    orphans.append(eid)
 
 def new_line (text):
     if last_entry_id == None:
         return
+  
+    e = entries[last_entry_id]
+    e["lines"].append(text)
 
-    entries[last_entry_id]["lines"].append(text)
+    if e["title"] == None:
+        text = pattern_special.sub('', text)
+        e["title"] = text
 
 def chapter_parse_line (line):
     code = line[0:2]
@@ -72,7 +82,7 @@ def entry_parse_line (line):
         pass
 
     if 'P' == c:
-        new_line(line)
+        new_line(line[2:])
 
 def load (filename):
     print "version 1050"
@@ -93,5 +103,5 @@ def load (filename):
 
     fd.close()
 
-    return chapters, entries
+    return chapters, entries, orphans
 
