@@ -1,4 +1,4 @@
-import os, sys
+import os, sys, re, string
 
 def zim_header ():
     return "Content-Type: text/x-zim-wiki\nWiki-Format: zim 0.4\nCreation-Date: 2019-05-04T10:45:10+02:00"
@@ -26,6 +26,7 @@ def write (diary_name, chapters, entries):
 
     for i in chapters:
         c = chapters[i]
+
         os.mkdir(diary_name + "/" + c["name"])
         fd = open(diary_name + "/" + c["name"] + ".txt", "w")
         fd.close()
