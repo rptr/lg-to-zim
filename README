@@ -6,8 +6,9 @@ converts Lifeograph diary files to zim directories
 
 TODO
 * proper timestamps in output
+    * will this fix sorting? right now they're sorted alphabetically
+      since they all have the same timestamp (0 AD)
 * formatting
-* place entries in the correct chapters
 
 does not support
 * tags
