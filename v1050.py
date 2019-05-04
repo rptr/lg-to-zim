@@ -1,12 +1,16 @@
+import re, string
 
 chapters        = {}
 entries         = {}
 last_entry_id   = None
+pattern_special = re.compile('[\W_]+')
 
 def new_chapter (code, line):
     split = line.split('	')
     cid = int(split[0])
     name = split[1]
+
+    name = pattern_special.sub('', name)
 
     chapters[cid] = {"name" : name,
                      "entries" : []}
@@ -15,8 +19,6 @@ def new_chapter (code, line):
 
 def new_entry (line):
     eid = int(line[4:])
-
-#    print "entry", eid
 
     entries[eid] = {"id" : eid, 
                     "lines" : []}
