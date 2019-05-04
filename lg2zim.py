@@ -1,29 +1,43 @@
 import sys
 import os
+import v1050, v1010, v110
 
 LG_VERSION  = 1050
 
-def new_chapter (chapter_name):
+#
+# ZIM GENERATION
+#
+
+def zim_header ():
+    return "Content-Type: text/x-zim-wiki\nWiki-Format: zim 0.4\nCreation-Date: 2019-05-04T10:45:10+02:00"
+
+print zim_header()
+
+def zim_generate ():
     pass
 
-def new_entry (entry_name):
+def zim_make_chapter (cid):
     pass
 
-def new_line (text):
+def zim_make_entry ():
     pass
 
-def parse_line (line):
-    code = line[0]
-    rest = line[2:]
+chapters = {}
+entries  = {}
 
-    if 'V' == code:
-        version = int(rest)
+#
+# 1010
+#
 
-        if version != LG_VERSION:
-            print "This format version ({}) is not supported.".format(version)
+def read_diary_1010 (fd):
+    print "version 1010 is not supported"
 
-    if 'P' == code:
-        new_line(rest)
+#
+# 110
+#
+
+def read_diary_110 (fd):
+    print "version 110 is not supported"
 
 def convert_lg_diary (filepath):
     diary_name = filepath.split('.')[0] + "_zim"
@@ -32,18 +46,29 @@ def convert_lg_diary (filepath):
         print diary_name, "already exists"
 #        return
 
-    os.rmtree(diary_name)
+    try:
+        os.rmdir(diary_name)
+    except OSError:
+        pass
+
     os.mkdir(diary_name)
 
     fd = open(filepath)
     line = fd.readline()
 
-    if line != "LIFEOGRAPHDB":
+    if line != "LIFEOGRAPHDB\n":
         print diary_name, "is not a valid Lifeograph file (does not start with LIFEOGRAPHDB)"
         return
 
-    for line in fd:
-        parse_line(line)
+    version = fd.readline()
+    vnum = int(version.split(' ')[1])
+
+    if vnum == 1050 or vnum == 1040 or vnum == 1030 or vnum == 1020:
+        v1050.load(filepath)
+    elif vnum == 1011 or vnum == 1010:
+        read_diary_1010(fd)
+    else
+        read_diary_110(fd)
 
     fd.close()
 
