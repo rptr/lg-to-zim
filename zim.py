@@ -1,9 +1,9 @@
 import os, sys, re, shutil
+from datetime import datetime
 
-def zim_header ():
-    return "Content-Type: text/x-zim-wiki\nWiki-Format: zim 0.4\nCreation-Date: 2019-05-04T10:45:10+02:00"
-
-print zim_header()
+def zim_header (created):
+    d = datetime.fromordinal(created)
+    return "Content-Type: text/x-zim-wiki\nWiki-Format: zim 0.4\nCreation-Date: " + d.isoformat() + "\n\n"
 
 def zim_generate ():
     pass
@@ -35,5 +35,11 @@ def write (diary_name, chapters, entries, orphans):
             continue
 
         fd = open(diary_name + "/" + name + ".txt", "w")
+        created = 1
+        fd.write(zim_header(created))
+
+        for line in e["lines"]:
+            fd.write(line)
+
         fd.close()
 
