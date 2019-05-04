@@ -6,6 +6,7 @@ LG_VERSION  = 1050
 
 chapters = {}
 entries  = {}
+orphans = []
 
 # 1010
 def read_diary_1010 (fd):
@@ -34,13 +35,13 @@ def convert_lg_diary (filepath):
     fd.close()
 
     if vnum == 1050 or vnum == 1040 or vnum == 1030 or vnum == 1020:
-        chapters, entries = v1050.load(filepath)
+        chapters, entries, orphans = v1050.load(filepath)
     elif vnum == 1011 or vnum == 1010:
         read_diary_1010(fd)
     else:
         read_diary_110(fd)
 
-    zim.write(diary_name, chapters, entries)
+    zim.write(diary_name, chapters, entries, orphans)
 
 if len(sys.argv) > 1:
     convert_lg_diary(sys.argv[1])
