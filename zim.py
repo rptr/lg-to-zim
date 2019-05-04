@@ -27,6 +27,6 @@ def write (diary_name, chapters, entries):
     for i in chapters:
         c = chapters[i]
         os.mkdir(diary_name + "/" + c["name"])
-        fd = open(c["name"] + ".txt", "w")
+        fd = open(diary_name + "/" + c["name"] + ".txt", "w")
         fd.close()
 
