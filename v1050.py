@@ -1,4 +1,4 @@
-import re, string
+import re, string, sys
 
 chapters        = {}
 orphans         = []
@@ -28,7 +28,20 @@ def new_entry (line):
     global last_entry_id
     last_entry_id = eid
 
-    orphans.append(eid)
+    orphan = True
+    chapter_id = 0
+    chapter_ids = sorted(chapters)
+
+    for i in chapter_ids:
+        if eid > i:
+            chapter_id = i
+            orphan = False
+
+    if orphan:
+        orphans.append(eid)
+    else:
+        c = chapters[chapter_id]
+        c["entries"].append(eid)
 
 def new_line (text):
     if last_entry_id == None:
@@ -65,7 +78,6 @@ def chapter_parse_line (line):
 
     # chapter preferences
     # if 'Cp' == code:
-
 
 def entry_parse_line (line):
     c = line[0]

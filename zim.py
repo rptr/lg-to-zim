@@ -14,32 +14,37 @@ def zim_make_chapter (cid):
 def zim_make_entry ():
     pass
 
-def write (diary_name, chapters, entries, orphans):
-    main = "zim_" + diary_name
+def write_entry (entry, directory):
+    name = entry["title"]
 
-    shutil.rmtree(diary_name)
+    fd = open(directory + name + ".txt", "w")
+    created = 1
+    fd.write(zim_header(created))
+
+    for line in entry["lines"]:
+        fd.write(line)
+
+    fd.close()
+
+def write (diary_name, chapters, entries, orphans):
+    try:
+        shutil.rmtree(diary_name)
+    except OSError:
+        pass
+
     os.mkdir(diary_name)
 
     for i in chapters:
         c = chapters[i]
-
-        os.mkdir(diary_name + "/" + c["name"])
-        fd = open(diary_name + "/" + c["name"] + ".txt", "w")
+        dr = diary_name + "/" + c["name"]
+        os.mkdir(dr)
+        fd = open(dr + ".txt", "w")
         fd.close()
+
+        for j in c["entries"]:
+            write_entry(entries[j], diary_name+"/"+c["name"]+"/")
+            print entries[j]["title"]
 
     for i in orphans:
-        e = entries[i]
-        name = e["title"]
-
-        if name == None:
-            continue
-
-        fd = open(diary_name + "/" + name + ".txt", "w")
-        created = 1
-        fd.write(zim_header(created))
-
-        for line in e["lines"]:
-            fd.write(line)
-
-        fd.close()
+        write_entry(entries[i], diary_name+"/")
 
