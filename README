@@ -2,6 +2,13 @@
 
 converts Lifeograph diary files to zim directories
 
+(this is very rough, i just wanted to extract all the entries from my diary to check something quickly, i'll finish this eventually)
+
+TODO
+* proper timestamps in output
+* formatting
+* place entries in the correct chapters
+
 does not support
 * tags
 * converting encrypted diary files
