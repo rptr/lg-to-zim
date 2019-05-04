@@ -36,6 +36,11 @@ def convert_lg_diary (filepath):
     os.mkdir(diary_name)
 
     fd = open(filepath)
+    line = fd.readline()
+
+    if line != "LIFEOGRAPHDB":
+        print diary_name, "is not a valid Lifeograph file (does not start with LIFEOGRAPHDB)"
+        return
 
     for line in fd:
         parse_line(line)
